@@ -1,0 +1,361 @@
+-- MySQL dump 10.13  Distrib 8.0.20, for Linux (x86_64)
+--
+-- Host: localhost    Database: cricket
+-- ------------------------------------------------------
+-- Server version	8.0.20-0ubuntu0.20.04.1
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Temporary view structure for view `ball_batsman_runs`
+--
+
+DROP TABLE IF EXISTS `ball_batsman_runs`;
+/*!50001 DROP VIEW IF EXISTS `ball_batsman_runs`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `ball_batsman_runs` AS SELECT 
+ 1 AS `match_id`,
+ 1 AS `over_id`,
+ 1 AS `ball_id`,
+ 1 AS `innings_no`,
+ 1 AS `team_batting`,
+ 1 AS `team_bowling`,
+ 1 AS `striker_batting_position`,
+ 1 AS `striker`,
+ 1 AS `non_striker`,
+ 1 AS `bowler`,
+ 1 AS `runs_scored`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary view structure for view `ball_bowler_runs_wnb`
+--
+
+DROP TABLE IF EXISTS `ball_bowler_runs_wnb`;
+/*!50001 DROP VIEW IF EXISTS `ball_bowler_runs_wnb`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `ball_bowler_runs_wnb` AS SELECT 
+ 1 AS `match_id`,
+ 1 AS `over_id`,
+ 1 AS `ball_id`,
+ 1 AS `innings_no`,
+ 1 AS `team_batting`,
+ 1 AS `team_bowling`,
+ 1 AS `striker_batting_position`,
+ 1 AS `striker`,
+ 1 AS `non_striker`,
+ 1 AS `bowler`,
+ 1 AS `runs_scored`,
+ 1 AS `extra_type`,
+ 1 AS `extra_runs`,
+ 1 AS `total_runs`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Table structure for table `balls`
+--
+
+DROP TABLE IF EXISTS `balls`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `balls` (
+  `match_id` int NOT NULL,
+  `over_id` int NOT NULL,
+  `ball_id` int NOT NULL,
+  `innings_no` int NOT NULL,
+  `team_batting` int NOT NULL,
+  `team_bowling` int NOT NULL,
+  `striker_batting_position` int DEFAULT NULL,
+  `striker` int NOT NULL,
+  `non_striker` int NOT NULL,
+  `bowler` int NOT NULL,
+  PRIMARY KEY (`match_id`,`over_id`,`ball_id`,`innings_no`),
+  KEY `team_batting` (`team_batting`),
+  KEY `team_bowling` (`team_bowling`),
+  KEY `striker` (`striker`),
+  KEY `non_striker` (`non_striker`),
+  KEY `bowler` (`bowler`),
+  CONSTRAINT `balls_ibfk_1` FOREIGN KEY (`match_id`) REFERENCES `matches` (`match_id`),
+  CONSTRAINT `balls_ibfk_2` FOREIGN KEY (`team_batting`) REFERENCES `teams` (`team_id`),
+  CONSTRAINT `balls_ibfk_3` FOREIGN KEY (`team_bowling`) REFERENCES `teams` (`team_id`),
+  CONSTRAINT `balls_ibfk_4` FOREIGN KEY (`striker`) REFERENCES `players` (`player_id`),
+  CONSTRAINT `balls_ibfk_5` FOREIGN KEY (`non_striker`) REFERENCES `players` (`player_id`),
+  CONSTRAINT `balls_ibfk_6` FOREIGN KEY (`bowler`) REFERENCES `players` (`player_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `balls`
+--
+
+LOCK TABLES `balls` WRITE;
+/*!40000 ALTER TABLE `balls` DISABLE KEYS */;
+/*!40000 ALTER TABLE `balls` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `extras`
+--
+
+DROP TABLE IF EXISTS `extras`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `extras` (
+  `match_id` int NOT NULL,
+  `over_id` int NOT NULL,
+  `ball_id` int NOT NULL,
+  `extra_type` varchar(80) DEFAULT NULL,
+  `extra_runs` int DEFAULT NULL,
+  `innings_no` int NOT NULL,
+  PRIMARY KEY (`match_id`,`over_id`,`ball_id`,`innings_no`),
+  CONSTRAINT `extras_ibfk_1` FOREIGN KEY (`match_id`, `over_id`, `ball_id`, `innings_no`) REFERENCES `balls` (`match_id`, `over_id`, `ball_id`, `innings_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `extras`
+--
+
+LOCK TABLES `extras` WRITE;
+/*!40000 ALTER TABLE `extras` DISABLE KEYS */;
+/*!40000 ALTER TABLE `extras` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `matches`
+--
+
+DROP TABLE IF EXISTS `matches`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `matches` (
+  `match_id` int NOT NULL,
+  `team_1` int DEFAULT NULL,
+  `team_2` int DEFAULT NULL,
+  `match_date` datetime NOT NULL,
+  `season_id` int DEFAULT NULL,
+  `venue` varchar(300) DEFAULT NULL,
+  `toss_winner` int DEFAULT NULL,
+  `toss_decision` varchar(80) DEFAULT NULL,
+  `win_type` varchar(80) DEFAULT NULL,
+  `win_margin` int DEFAULT NULL,
+  `outcome_type` varchar(80) DEFAULT NULL,
+  `match_winner` int DEFAULT NULL,
+  `man_of_the_match` int DEFAULT NULL,
+  PRIMARY KEY (`match_id`),
+  KEY `team_1` (`team_1`),
+  KEY `team_2` (`team_2`),
+  KEY `toss_winner` (`toss_winner`),
+  KEY `match_winner` (`match_winner`),
+  KEY `man_of_the_match` (`man_of_the_match`),
+  CONSTRAINT `matches_ibfk_1` FOREIGN KEY (`team_1`) REFERENCES `teams` (`team_id`),
+  CONSTRAINT `matches_ibfk_2` FOREIGN KEY (`team_2`) REFERENCES `teams` (`team_id`),
+  CONSTRAINT `matches_ibfk_3` FOREIGN KEY (`toss_winner`) REFERENCES `teams` (`team_id`),
+  CONSTRAINT `matches_ibfk_4` FOREIGN KEY (`match_winner`) REFERENCES `teams` (`team_id`),
+  CONSTRAINT `matches_ibfk_5` FOREIGN KEY (`man_of_the_match`) REFERENCES `players` (`player_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `matches`
+--
+
+LOCK TABLES `matches` WRITE;
+/*!40000 ALTER TABLE `matches` DISABLE KEYS */;
+/*!40000 ALTER TABLE `matches` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `players`
+--
+
+DROP TABLE IF EXISTS `players`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `players` (
+  `player_id` int NOT NULL,
+  `player_name` varchar(300) NOT NULL,
+  `dob` date NOT NULL,
+  `batting_hand` varchar(80) DEFAULT NULL,
+  `bowling_skill` varchar(300) DEFAULT NULL,
+  `country_name` varchar(80) NOT NULL,
+  PRIMARY KEY (`player_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `players`
+--
+
+LOCK TABLES `players` WRITE;
+/*!40000 ALTER TABLE `players` DISABLE KEYS */;
+/*!40000 ALTER TABLE `players` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `roles`
+--
+
+DROP TABLE IF EXISTS `roles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `roles` (
+  `match_id` int NOT NULL,
+  `player_id` int NOT NULL,
+  `role` varchar(80) NOT NULL,
+  `team_id` int NOT NULL,
+  PRIMARY KEY (`match_id`,`player_id`),
+  KEY `player_id` (`player_id`),
+  KEY `team_id` (`team_id`),
+  CONSTRAINT `roles_ibfk_1` FOREIGN KEY (`match_id`) REFERENCES `matches` (`match_id`),
+  CONSTRAINT `roles_ibfk_2` FOREIGN KEY (`player_id`) REFERENCES `players` (`player_id`),
+  CONSTRAINT `roles_ibfk_3` FOREIGN KEY (`team_id`) REFERENCES `teams` (`team_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `roles`
+--
+
+LOCK TABLES `roles` WRITE;
+/*!40000 ALTER TABLE `roles` DISABLE KEYS */;
+/*!40000 ALTER TABLE `roles` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `runs`
+--
+
+DROP TABLE IF EXISTS `runs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `runs` (
+  `match_id` int NOT NULL,
+  `over_id` int NOT NULL,
+  `ball_id` int NOT NULL,
+  `runs_scored` int DEFAULT '0',
+  `innings_no` int NOT NULL,
+  PRIMARY KEY (`match_id`,`over_id`,`ball_id`,`innings_no`),
+  CONSTRAINT `runs_ibfk_1` FOREIGN KEY (`match_id`, `over_id`, `ball_id`, `innings_no`) REFERENCES `balls` (`match_id`, `over_id`, `ball_id`, `innings_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `runs`
+--
+
+LOCK TABLES `runs` WRITE;
+/*!40000 ALTER TABLE `runs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `runs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `teams`
+--
+
+DROP TABLE IF EXISTS `teams`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `teams` (
+  `team_id` int NOT NULL,
+  `team_name` varchar(300) NOT NULL,
+  PRIMARY KEY (`team_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `teams`
+--
+
+LOCK TABLES `teams` WRITE;
+/*!40000 ALTER TABLE `teams` DISABLE KEYS */;
+/*!40000 ALTER TABLE `teams` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wickets`
+--
+
+DROP TABLE IF EXISTS `wickets`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `wickets` (
+  `match_id` int NOT NULL,
+  `over_id` int NOT NULL,
+  `ball_id` int NOT NULL,
+  `player_out` int NOT NULL,
+  `kind_out` varchar(80) DEFAULT NULL,
+  `innings_no` int NOT NULL,
+  PRIMARY KEY (`match_id`,`over_id`,`ball_id`,`innings_no`),
+  KEY `player_out` (`player_out`),
+  CONSTRAINT `wickets_ibfk_1` FOREIGN KEY (`match_id`, `over_id`, `ball_id`, `innings_no`) REFERENCES `balls` (`match_id`, `over_id`, `ball_id`, `innings_no`),
+  CONSTRAINT `wickets_ibfk_2` FOREIGN KEY (`player_out`) REFERENCES `players` (`player_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `wickets`
+--
+
+LOCK TABLES `wickets` WRITE;
+/*!40000 ALTER TABLE `wickets` DISABLE KEYS */;
+/*!40000 ALTER TABLE `wickets` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Final view structure for view `ball_batsman_runs`
+--
+
+/*!50001 DROP VIEW IF EXISTS `ball_batsman_runs`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `ball_batsman_runs` AS select `balls`.`match_id` AS `match_id`,`balls`.`over_id` AS `over_id`,`balls`.`ball_id` AS `ball_id`,`balls`.`innings_no` AS `innings_no`,`balls`.`team_batting` AS `team_batting`,`balls`.`team_bowling` AS `team_bowling`,`balls`.`striker_batting_position` AS `striker_batting_position`,`balls`.`striker` AS `striker`,`balls`.`non_striker` AS `non_striker`,`balls`.`bowler` AS `bowler`,`runs`.`runs_scored` AS `runs_scored` from (`balls` join `runs` on(((`balls`.`match_id` = `runs`.`match_id`) and (`balls`.`over_id` = `runs`.`over_id`) and (`balls`.`ball_id` = `runs`.`ball_id`) and (`balls`.`innings_no` = `runs`.`innings_no`)))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `ball_bowler_runs_wnb`
+--
+
+/*!50001 DROP VIEW IF EXISTS `ball_bowler_runs_wnb`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `ball_bowler_runs_wnb` AS select `balls`.`match_id` AS `match_id`,`balls`.`over_id` AS `over_id`,`balls`.`ball_id` AS `ball_id`,`balls`.`innings_no` AS `innings_no`,`balls`.`team_batting` AS `team_batting`,`balls`.`team_bowling` AS `team_bowling`,`balls`.`striker_batting_position` AS `striker_batting_position`,`balls`.`striker` AS `striker`,`balls`.`non_striker` AS `non_striker`,`balls`.`bowler` AS `bowler`,`runs`.`runs_scored` AS `runs_scored`,`R2`.`extra_type` AS `extra_type`,`R2`.`extra_runs` AS `extra_runs`,(`runs`.`runs_scored` + ifnull(`R2`.`extra_runs`,0)) AS `total_runs` from ((`balls` join `runs` on(((`balls`.`match_id` = `runs`.`match_id`) and (`balls`.`over_id` = `runs`.`over_id`) and (`balls`.`ball_id` = `runs`.`ball_id`) and (`balls`.`innings_no` = `runs`.`innings_no`)))) left join (select `extras`.`match_id` AS `match_id`,`extras`.`over_id` AS `over_id`,`extras`.`ball_id` AS `ball_id`,`extras`.`extra_type` AS `extra_type`,`extras`.`extra_runs` AS `extra_runs`,`extras`.`innings_no` AS `innings_no` from `extras` where ((`extras`.`extra_type` = 'wides') or (0 <> 'noballs'))) `R2` on(((`balls`.`match_id` = `R2`.`match_id`) and (`balls`.`over_id` = `R2`.`over_id`) and (`balls`.`ball_id` = `R2`.`ball_id`) and (`balls`.`innings_no` = `R2`.`innings_no`)))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2021-02-15 21:47:08

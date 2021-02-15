@@ -1,0 +1,55 @@
+LOAD DATA INFILE '/var/lib/mysql-files/player.csv' 
+INTO TABLE players 
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 2 ROWS;
+
+LOAD DATA INFILE '/var/lib/mysql-files/team.csv' 
+INTO TABLE teams
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+
+LOAD DATA INFILE '/var/lib/mysql-files/match.csv' 
+INTO TABLE matches
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 2 ROWS;
+
+LOAD DATA INFILE '/var/lib/mysql-files/player_match.csv' 
+INTO TABLE roles
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 2 ROWS;
+
+LOAD DATA INFILE '/var/lib/mysql-files/ball_by_ball.csv' 
+INTO TABLE balls
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 3 ROWS;
+
+LOAD DATA INFILE '/var/lib/mysql-files/wicket_taken.csv' 
+INTO TABLE wickets
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 2 ROWS;
+
+LOAD DATA INFILE '/var/lib/mysql-files/batsman_scored.csv' 
+INTO TABLE runs
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 2 ROWS;
+
+LOAD DATA INFILE '/var/lib/mysql-files/extra_runs.csv' 
+INTO TABLE extras
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 2 ROWS;
